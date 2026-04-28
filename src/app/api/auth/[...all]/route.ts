@@ -5,5 +5,5 @@ import { toNextJsHandler } from "better-auth/next-js";
 // session, etc.) — wrapping it in withAuth would create a chicken-and-egg loop
 // where you couldn't sign in without already being signed in. This is the
 // documented escape hatch from the canteen-route-protection skill.
-// eslint-disable-next-line canteen/require-auth-wrapper
+ 
 export const { GET, POST } = toNextJsHandler(auth);

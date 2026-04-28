@@ -8,6 +8,21 @@ datasource db {
   url      = "file:./dev.db"
 }
 
+model PickupSlot {
+  id          String   @id @default(cuid())
+  date        String   // "2026-04-28" (ISO date string, server timezone)
+  startTime   String   // "12:00" (HH:mm, 24h format, server timezone)
+  endTime     String   // "12:15"
+  capacity    Int      @default(10)  // max orders per slot
+  bookedCount Int      @default(0)   // denormalized counter for atomic overbooking prevention
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  orders Order[]
+
+  @@unique([date, startTime])
+}
+
 model MenuItem {
   id          String   @id @default(cuid())
   name        String
@@ -22,18 +37,21 @@ model MenuItem {
 }
 
 model Order {
-  id         String   @id @default(cuid())
-  userId     String
-  status     String   @default("pending") // "pending" | "ready" | "picked_up"
-  totalCents Int
-  notes      String?
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  id           String   @id @default(cuid())
+  userId       String
+  status       String   @default("pending") // "pending" | "preparing" | "ready" | "picked_up" | "cancelled"
+  totalCents   Int
+  notes        String?
+  pickupSlotId String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 
-  user  User        @relation(fields: [userId], references: [id], onDelete: Cascade)
-  items OrderItem[]
+  user       User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items      OrderItem[]
+  pickupSlot PickupSlot? @relation(fields: [pickupSlotId], references: [id])
 
   @@index([userId])
+  @@index([pickupSlotId])
 }
 
 model OrderItem {
@@ -53,6 +71,7 @@ model User {
   email         String
   emailVerified Boolean   @default(false)
   image         String?
+  role          String    @default("student") // "student" | "kitchen"
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
   sessions      Session[]

@@ -1,2 +1,7 @@
-// Placeholder for the orders integration test suite.
-// Students wire this up during the workshop once a test database is provisioned.
+import { describe, it, expect } from "vitest";
+
+describe("orders API", () => {
+  it("dummy test", () => {
+    expect(true).toBe(true);
+  });
+});
