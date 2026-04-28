@@ -1,9 +1,5 @@
-import { MenuService } from "@/lib/services/menu";
-import { MenuClient } from "./_components/menu-client";
+import { redirect } from "next/navigation";
 
-export const dynamic = "force-dynamic";
-
-export default async function MenuPage() {
-  const items = await MenuService.list();
-  return <MenuClient items={items} />;
+export default function MenuPage() {
+  redirect("/order");
 }

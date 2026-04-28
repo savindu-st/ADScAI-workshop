@@ -69,7 +69,7 @@ export class SlotService {
     let currentHour = 11;
     let currentMinute = 0;
 
-    while (currentHour < 14 || (currentHour === 14 && currentMinute === 0)) {
+    while (currentHour < 23 || (currentHour === 23 && currentMinute === 0)) {
       const startTime = `${currentHour.toString().padStart(2, "0")}:${currentMinute.toString().padStart(2, "0")}`;
       
       currentMinute += 15;
@@ -80,7 +80,7 @@ export class SlotService {
       
       const endTime = `${currentHour.toString().padStart(2, "0")}:${currentMinute.toString().padStart(2, "0")}`;
       
-      if (currentHour > 14 || (currentHour === 14 && currentMinute > 0)) {
+      if (currentHour > 23 || (currentHour === 23 && currentMinute > 0)) {
           break;
       }
 
